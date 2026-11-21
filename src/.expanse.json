@@ -124,7 +124,7 @@
         1
       ]
     },
-    "c299a513-12ef-4818-a42e-8e381ac9c012": {
+    "a42708c4-499c-4204-bbdd-b504f7413082": {
       "components": {
         "__inre_aparicion__": {
           "id": "__inre_aparicion__",
@@ -143,17 +143,17 @@
         "width": 1,
         "height": 0.5625
       },
-      "id": "c299a513-12ef-4818-a42e-8e381ac9c012",
+      "id": "a42708c4-499c-4204-bbdd-b504f7413082",
       "material": {
         "type": "video",
         "color": "#ffffff",
         "textureSrc": {
           "type": "asset",
-          "asset": "assets/animacion1.mp4"
+          "asset": "assets/VideoPaper.mp4"
         }
       },
-      "name": "animacion1",
-      "order": 0.2510175206015255,
+      "name": "VideoPaper",
+      "order": 0.744905662776443,
       "parentId": "24c55934-762c-4476-b4b6-4893d6823d76",
       "position": [
         0,
