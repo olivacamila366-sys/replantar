@@ -1,0 +1,27 @@
+{
+  "imagePath": "image-targets/IMG_20260909_150151_jpg_luminance.png",
+  "resources": {
+    "originalImage": "IMG_20260909_150151_jpg_original.png",
+    "croppedImage": "IMG_20260909_150151_jpg_cropped.png",
+    "thumbnailImage": "IMG_20260909_150151_jpg_thumbnail.png",
+    "luminanceImage": "IMG_20260909_150151_jpg_luminance.png"
+  },
+  "name": "IMG_20260909_150151_jpg",
+  "type": "PLANAR",
+  "metadata": null,
+  "moveable": false,
+  "physicalWidthInMeters": null,
+  "properties": {
+    "top": 0,
+    "left": 0,
+    "width": 3000,
+    "height": 4000,
+    "isRotated": true,
+    "originalWidth": 3000,
+    "originalHeight": 4000
+  },
+  "userMetadataIsJson": true,
+  "loadAutomatically": true,
+  "created": 1795230733714,
+  "updated": 1795230733714
+}
