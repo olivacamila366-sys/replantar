@@ -6,7 +6,7 @@
  * lienzo. Si algo falla dentro, se retira sola para no dejar la pantalla tapada.
  */
 
-const MARCADORES = ["IMG_20260909_150023_jpg","IMG_20240226_081725_jpg","IMG_20260909_150046_jpg","IMG_20260909_152237_jpg","IMG_20260909_150151_jpg"]
+const MARCADORES = ["Recurso_1"]
 
 /**
  * Cuenta las descargas en curso de archivos del proyecto (assets/ o blobs) para
@@ -39,6 +39,64 @@ if (typeof window.fetch === 'function') {
       notificarDescargas()
     })
   }
+}
+
+/*
+ * ┌─ iOS: el permiso de sensores de movimiento ─────────────────────────────────┐
+ * │ Safari exige que DeviceMotionEvent.requestPermission() salga de un toque.    │
+ * │ El motor lo intenta sin toque, falla, y pinta su propio aviso (.prompt-box-8w │
+ * │ en permissions-helper.ts) con un botón Continue que repite la petición       │
+ * │ dentro del gesto. Hasta que se toca, NO pide la cámara: el estado nunca pasa  │
+ * │ a requesting. En Android no existe ese paso, por eso allí todo funcionaba.   │
+ * │                                                                             │
+ * │ Ese aviso nace con z-index 888 y esta capa tiene 2147483646: quedaba tapado, │
+ * │ y el iPhone se quedaba en «Cargando experiencia…» sin nada que tocar.        │
+ * │ Aquí se sube por encima (CSS de arriba), se traduce y se avisa a la capa.    │
+ * └─────────────────────────────────────────────────────────────────────────────┘
+ */
+type EstadoSensores = 'ninguno' | 'visible' | 'continuar' | 'cancelar'
+let avisoSensores: EstadoSensores = 'ninguno'
+const oyentesSensores = new Set<(estado: EstadoSensores) => void>()
+const cambiarSensores = (estado: EstadoSensores) => {
+  avisoSensores = estado
+  for (const fn of oyentesSensores) {
+    fn(estado)
+  }
+}
+
+const prepararAvisoSensores = (caja: HTMLElement) => {
+  if (caja.dataset.inre === '1') {
+    return
+  }
+  caja.dataset.inre = '1'
+  const texto = caja.querySelector('p')
+  if (texto !== null) {
+    texto.textContent = 'Para ver la realidad aumentada, permite el acceso a los sensores de movimiento.'
+  }
+  const botones = caja.querySelectorAll('button')
+  const cancelar = botones[0]
+  const continuar = botones[1]
+  if (cancelar !== undefined) {
+    cancelar.textContent = 'Cancelar'
+    cancelar.addEventListener('click', () => cambiarSensores('cancelar'), {once: true})
+  }
+  if (continuar !== undefined) {
+    continuar.textContent = 'Continuar'
+    continuar.addEventListener('click', () => cambiarSensores('continuar'), {once: true})
+  }
+  cambiarSensores('visible')
+}
+
+if (typeof MutationObserver === 'function' && document.body !== null) {
+  new MutationObserver((cambios) => {
+    for (const cambio of cambios) {
+      cambio.addedNodes.forEach((nodo) => {
+        if (nodo instanceof HTMLElement && nodo.classList.contains('prompt-box-8w')) {
+          prepararAvisoSensores(nodo)
+        }
+      })
+    }
+  }).observe(document.body, {childList: true})
 }
 
 /** El motor, tal como lo ve este archivo. */
@@ -238,6 +296,10 @@ const crearCapa = (): {raiz: HTMLElement, titulo: HTMLElement, pista: HTMLElemen
         color: #f0b4b1;
       }
       #inre-espera.inre-error .inre-aviso { max-height: 240px; opacity: 1; padding: 12px 14px; }
+      /* iOS: el aviso de sensores del motor va POR ENCIMA de esta capa (ver avisoSensores). */
+      .prompt-box-8w, .immersive-enter-button-8w, .immersive-background-8w {
+        z-index: 2147483647 !important;
+      }
   `
 
   if (existente !== null) {
@@ -262,10 +324,10 @@ const crearCapa = (): {raiz: HTMLElement, titulo: HTMLElement, pista: HTMLElemen
         <div></div><div></div><div></div><div></div><div></div><div></div>
       </div>
     </div>
-    <div class="inre-marca" aria-label="Zence Inverse Reality Beta 1.0">
+    <div class="inre-marca" aria-label="Zence Inverse Reality Beta 1.0.1">
       <span class="inre-marca-zence">Zence</span>
       <span class="inre-marca-sub">Inverse Reality</span>
-      <span class="inre-marca-beta">Beta 1.0</span>
+      <span class="inre-marca-beta">Beta 1.0.1</span>
     </div>
     <p class="inre-titulo">Cargando experiencia…</p>
     <p class="inre-pista"></p>
@@ -404,6 +466,46 @@ const montar = () => {
 
   const sinMarcadores = MARCADORES.length === 0
   let estadoCamara = 'inicial'
+
+  /* El aviso de sensores de iOS (ver avisoSensores): la capa explica qué tocar. */
+  const alCambiarSensores = (estado: EstadoSensores) => {
+    if (retirada || errorAparecido) {
+      return
+    }
+    if (estado === 'visible') {
+      escribir(
+        'Permiso necesario',
+        'Toca «Continuar» en el aviso y después «Permitir» para los sensores de movimiento.',
+        false
+      )
+      return
+    }
+    if (estado === 'cancelar') {
+      avisar(
+        'Sin acceso a los sensores de movimiento la realidad aumentada no puede arrancar. '
+        + 'Recarga la página y toca «Continuar».'
+      )
+      return
+    }
+    if (estado === 'continuar') {
+      escribir('Preparando la experiencia…', 'Pidiendo permisos.', false)
+      // Si en el diálogo de Safari se eligió «No permitir», el motor se rinde sin
+      // cambiar el estado de la cámara: sin este plazo la capa giraría para siempre.
+      window.setTimeout(() => {
+        if (!retirada && !errorAparecido && estadoCamara === 'inicial') {
+          avisar(
+            'No se concedió el acceso a los sensores de movimiento. Cierra la pestaña, '
+            + 'vuelve a abrir el enlace en Safari y toca «Permitir». Si no aparece, '
+            + 'revísalo en Ajustes › Safari › Movimiento y orientación.'
+          )
+        }
+      }, 9000)
+    }
+  }
+  oyentesSensores.add(alCambiarSensores)
+  if (avisoSensores !== 'ninguno') {
+    alCambiarSensores(avisoSensores)
+  }
   let temporizadorPermiso: number | null = null
   const limpiarPermiso = () => {
     if (temporizadorPermiso !== null) {
@@ -559,74 +661,162 @@ const montar = () => {
 }
 
 /*
- * Botón discreto de instalación PWA cuando el navegador ofrece `beforeinstallprompt`.
- * Solo icono compacto en la esquina inferior derecha, con la estética de Zence.
+ * ┌─ Botón de instalar la app ──────────────────────────────────────────────────┐
+ * │ Android/Chrome: el navegador avisa con beforeinstallprompt y el botón abre   │
+ * │ su diálogo nativo.                                                          │
+ * │                                                                             │
+ * │ iPhone/iPad: Safari NO tiene ese evento ni ninguna API para instalar. La     │
+ * │ única vía es Compartir › «Añadir a pantalla de inicio», a mano. Esperar el   │
+ * │ evento dejaba el botón sin aparecer nunca en iOS; ahí se enseña siempre y    │
+ * │ abre una hoja con los pasos.                                                │
+ * └─────────────────────────────────────────────────────────────────────────────┘
  */
+const ICONO_INSTALAR =
+  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" ' +
+  'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+  '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>' +
+  '<polyline points="7 10 12 15 17 10"/>' +
+  '<line x1="12" y1="15" x2="12" y2="3"/>' +
+  '</svg>'
+
+/** El icono de Compartir de Safari: un cuadro con una flecha hacia arriba. */
+const ICONO_COMPARTIR =
+  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" ' +
+  'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+  '<path d="M8 10H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-2"/>' +
+  '<polyline points="16 6 12 2 8 6"/>' +
+  '<line x1="12" y1="2" x2="12" y2="15"/>' +
+  '</svg>'
+
+const asegurarEstiloInstalar = () => {
+  if (document.getElementById('inre-pwa-instalar-estilo') !== null) {
+    return
+  }
+  const estilo = document.createElement('style')
+  estilo.id = 'inre-pwa-instalar-estilo'
+  estilo.textContent = [
+    '#inre-pwa-instalar {',
+    '  position: fixed;',
+    '  right: max(14px, env(safe-area-inset-right));',
+    '  bottom: max(14px, env(safe-area-inset-bottom));',
+    '  z-index: 2147483647;',
+    '  width: 36px; height: 36px; padding: 0;',
+    '  display: inline-flex; align-items: center; justify-content: center;',
+    '  border-radius: 10px;',
+    '  border: 1px solid rgba(167, 139, 250, 0.36);',
+    '  background: rgba(11, 11, 18, 0.78);',
+    '  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);',
+    '  color: #c4b5fd; cursor: pointer;',
+    '  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.36);',
+    '  transition: transform 140ms ease, border-color 140ms ease, background 140ms ease;',
+    '}',
+    '#inre-pwa-instalar:hover { border-color: rgba(167, 139, 250, 0.7); background: rgba(18, 18, 30, 0.9); }',
+    '#inre-pwa-instalar:active { transform: scale(0.94); }',
+    '#inre-pwa-instalar svg { width: 16px; height: 16px; display: block; }',
+    '#inre-pwa-hoja {',
+    '  position: fixed; inset: 0; z-index: 2147483647;',
+    '  display: flex; align-items: flex-end; justify-content: center;',
+    '  background: rgba(0, 0, 0, 0.45);',
+    '  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;',
+    '}',
+    '#inre-pwa-hoja .inre-hoja-caja {',
+    '  width: 100%; max-width: 420px; box-sizing: border-box;',
+    '  margin: 0 10px max(10px, env(safe-area-inset-bottom));',
+    '  padding: 18px 18px 14px; border-radius: 16px;',
+    '  background: #11111b; color: #f2f4f8;',
+    '  border: 1px solid rgba(167, 139, 250, 0.3);',
+    '  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);',
+    '}',
+    '#inre-pwa-hoja h2 { margin: 0 0 10px; font-size: 16px; font-weight: 700; }',
+    '#inre-pwa-hoja ol { margin: 0 0 14px; padding-left: 20px; font-size: 14px; line-height: 1.7; color: rgba(242, 244, 248, 0.85); }',
+    '#inre-pwa-hoja svg { width: 17px; height: 17px; vertical-align: -3px; color: #4f9cff; }',
+    '#inre-pwa-hoja p { margin: 0 0 14px; font-size: 14px; line-height: 1.6; color: rgba(242, 244, 248, 0.85); }',
+    '#inre-pwa-hoja button {',
+    '  width: 100%; padding: 10px; border: 0; border-radius: 10px;',
+    '  background: #7c5cff; color: #fff; font-size: 15px; font-weight: 600; font-family: inherit;',
+    '}',
+  ].join('\n')
+  document.head.appendChild(estilo)
+}
+
+const crearBotonInstalar = (alTocar: () => void) => {
+  if (document.getElementById('inre-pwa-instalar') !== null) {
+    return
+  }
+  asegurarEstiloInstalar()
+  const boton = document.createElement('button')
+  boton.id = 'inre-pwa-instalar'
+  boton.type = 'button'
+  boton.title = 'Instalar app'
+  boton.setAttribute('aria-label', 'Instalar app')
+  boton.innerHTML = ICONO_INSTALAR
+  boton.addEventListener('click', alTocar)
+  document.body.appendChild(boton)
+}
+
 window.addEventListener('beforeinstallprompt', (evento: Event) => {
   const promptEvento = evento as Event & {prompt?: () => Promise<void>}
   if (typeof promptEvento.prompt !== 'function') {
     return
   }
   evento.preventDefault()
-  if (document.getElementById('inre-pwa-instalar') !== null) {
-    return
-  }
-  if (document.getElementById('inre-pwa-instalar-estilo') === null) {
-    const estilo = document.createElement('style')
-    estilo.id = 'inre-pwa-instalar-estilo'
-    estilo.textContent = `
-      #inre-pwa-instalar {
-        position: fixed;
-        right: max(14px, env(safe-area-inset-right));
-        bottom: max(14px, env(safe-area-inset-bottom));
-        z-index: 2147483647;
-        width: 36px;
-        height: 36px;
-        padding: 0;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 10px;
-        border: 1px solid rgba(167, 139, 250, 0.36);
-        background: rgba(11, 11, 18, 0.78);
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
-        color: #c4b5fd;
-        cursor: pointer;
-        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.36);
-        transition: transform 140ms ease, border-color 140ms ease, background 140ms ease;
-      }
-      #inre-pwa-instalar:hover {
-        border-color: rgba(167, 139, 250, 0.7);
-        background: rgba(18, 18, 30, 0.9);
-      }
-      #inre-pwa-instalar:active { transform: scale(0.94); }
-      #inre-pwa-instalar svg { width: 16px; height: 16px; display: block; }
-    `
-    document.head.appendChild(estilo)
-  }
-  const boton = document.createElement('button')
-  boton.id = 'inre-pwa-instalar'
-  boton.type = 'button'
-  boton.title = 'Instalar app'
-  boton.setAttribute('aria-label', 'Instalar app')
-  boton.innerHTML =
-    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" ' +
-    'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
-    '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>' +
-    '<polyline points="7 10 12 15 17 10"/>' +
-    '<line x1="12" y1="15" x2="12" y2="3"/>' +
-    '</svg>'
-  boton.addEventListener('click', () => {
+  crearBotonInstalar(() => {
     void promptEvento.prompt?.().catch(() => {})
-    boton.remove()
+    document.getElementById('inre-pwa-instalar')?.remove()
   })
-  document.body.appendChild(boton)
 })
 
 window.addEventListener('appinstalled', () => {
   document.getElementById('inre-pwa-instalar')?.remove()
 })
+
+const esIos = /iPad|iPhone|iPod/.test(navigator.userAgent)
+  // iPadOS 13+ se presenta como un Mac de escritorio; lo delata la pantalla táctil.
+  || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+
+const yaInstalada = (navigator as Navigator & {standalone?: boolean}).standalone === true
+  || (typeof window.matchMedia === 'function'
+    && window.matchMedia('(display-mode: standalone)').matches)
+
+/*
+ * Los navegadores internos (Instagram, Facebook, LINE…) no tienen «Añadir a pantalla
+ * de inicio»: ahí lo útil es decir que se abra en Safari.
+ */
+const navegadorInterno = /FBAN|FBAV|Instagram|Line\/|Twitter|TikTok|Snapchat/i
+  .test(navigator.userAgent)
+
+const mostrarHojaIos = () => {
+  if (document.getElementById('inre-pwa-hoja') !== null) {
+    return
+  }
+  asegurarEstiloInstalar()
+  const hoja = document.createElement('div')
+  hoja.id = 'inre-pwa-hoja'
+  hoja.setAttribute('role', 'dialog')
+  hoja.setAttribute('aria-label', 'Instalar app')
+  hoja.innerHTML = navegadorInterno
+    ? '<div class="inre-hoja-caja"><h2>Instalar app</h2>'
+      + '<p>Este visor no permite instalar apps. Abre el enlace en <b>Safari</b> '
+      + '(menú ··· › Abrir en el navegador) y vuelve a tocar este botón.</p>'
+      + '<button type="button">Entendido</button></div>'
+    : '<div class="inre-hoja-caja"><h2>Instalar app</h2><ol>'
+      + '<li>Toca <b>Compartir</b> ' + ICONO_COMPARTIR + ' en la barra del navegador.</li>'
+      + '<li>Desliza y elige <b>«Añadir a pantalla de inicio»</b>.</li>'
+      + '<li>Toca <b>«Añadir»</b>.</li>'
+      + '</ol><button type="button">Entendido</button></div>'
+  const cerrar = () => hoja.remove()
+  hoja.addEventListener('click', (e) => {
+    if (e.target === hoja) {
+      cerrar()
+    }
+  })
+  hoja.querySelector('button')?.addEventListener('click', cerrar)
+  document.body.appendChild(hoja)
+}
+
+if (esIos && !yaInstalada) {
+  crearBotonInstalar(mostrarHojaIos)
+}
 
 /*
  * Se engancha en cuanto el motor existe. Se comprueba antes por si llegó primero: ese

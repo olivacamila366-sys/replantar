@@ -1,6 +1,6 @@
 {
-  "name": "Replantar",
-  "short_name": "Replantar",
+  "name": "Mi experiencia AR",
+  "short_name": "Mi experiencia AR",
   "description": "Experiencia de realidad aumentada creada con Zence Inverse Reality.",
   "start_url": "./",
   "scope": "./",

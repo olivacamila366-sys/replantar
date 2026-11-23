@@ -5,19 +5,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
-  <title>Replantar</title>
+  <title>Mi experiencia AR</title>
   <link rel="manifest" href="./manifest.json">
   <meta name="theme-color" content="#06060a">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Replantar">
+  <meta name="apple-mobile-web-app-title" content="Mi experiencia AR">
   <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
   <link rel="apple-touch-icon" sizes="192x192" href="./icon-192.png">
-  <meta itemprop="name" content="Replantar">
-  <meta name="twitter:title" content="Replantar">
-  <meta property="og:title" content="Replantar">
-  <meta property="og:site_name" content="Replantar">
+  <meta itemprop="name" content="Mi experiencia AR">
+  <meta name="twitter:title" content="Mi experiencia AR">
+  <meta property="og:title" content="Mi experiencia AR">
+  <meta property="og:site_name" content="Mi experiencia AR">
   <meta name="description" content="Experiencia de realidad aumentada creada con Zence Inverse Reality.">
   <meta itemprop="description" content="Experiencia de realidad aumentada creada con Zence Inverse Reality.">
   <meta property="og:description" content="Experiencia de realidad aumentada creada con Zence Inverse Reality.">
@@ -115,6 +115,14 @@
     }
     #inre-espera .inre-pista { font-size: 14px; line-height: 1.6; margin: 0; max-width: 34ch; color: rgba(242, 244, 248, 0.72); }
     #inre-espera .inre-aviso { overflow: hidden; max-height: 0; opacity: 0; margin: 0; }
+    /*
+     * iOS: el aviso de sensores de movimiento del motor (permissions-helper.ts) nace
+     * con z-index 888, debajo de la pantalla de espera. Sin esto el iPhone se queda
+     * en «Cargando experiencia…» para siempre: el botón que hay que tocar está tapado.
+     */
+    .prompt-box-8w, .immersive-enter-button-8w, .immersive-background-8w {
+      z-index: 2147483647 !important;
+    }
   </style>
 
   <script crossorigin="anonymous" src="./external/runtime/runtime.js"></script>
@@ -130,10 +138,10 @@
       <div></div><div></div><div></div><div></div><div></div><div></div>
     </div>
   </div>
-  <div class="inre-marca" aria-label="Zence Inverse Reality Beta 1.0">
+  <div class="inre-marca" aria-label="Zence Inverse Reality Beta 1.0.1">
     <span class="inre-marca-zence">Zence</span>
     <span class="inre-marca-sub">Inverse Reality</span>
-    <span class="inre-marca-beta">Beta 1.0</span>
+    <span class="inre-marca-beta">Beta 1.0.1</span>
   </div>
   <p class="inre-titulo">Cargando experiencia…</p>
   <p class="inre-pista"></p>
