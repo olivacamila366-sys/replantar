@@ -290,6 +290,74 @@
         1
       ]
     },
+    "696f22df-6ece-4c8a-b1b2-3d3f4f330a6b": {
+      "components": {
+        "__inre_aparicion__": {
+          "id": "__inre_aparicion__",
+          "name": "inre-aparicion",
+          "parameters": {
+            "cubo": 0.75,
+            "demora": 0,
+            "esGltf": false,
+            "esTextura": true,
+            "esVideo": true
+          }
+        },
+        "a9d4825d-8635-4338-b593-18a682a78ee5": {
+          "id": "a9d4825d-8635-4338-b593-18a682a78ee5",
+          "name": "inre-video",
+          "parameters": {
+            "alphaTest": 0.5,
+            "blending": "normal",
+            "depthTest": true,
+            "depthWrite": false,
+            "forceTransparent": true,
+            "side": "double"
+          }
+        }
+      },
+      "geometry": {
+        "type": "plane",
+        "width": 1,
+        "height": 0.7799999999999999
+      },
+      "id": "696f22df-6ece-4c8a-b1b2-3d3f4f330a6b",
+      "material": {
+        "type": "video",
+        "color": "#ffffff",
+        "textureSrc": {
+          "type": "asset",
+          "asset": "assets/escena6.webm"
+        },
+        "forceTransparent": true,
+        "depthWrite": false,
+        "side": "double",
+        "alphaTest": 0.5
+      },
+      "name": "escena6",
+      "order": 0.3894514723455591,
+      "parentId": "7fb4eb08-e3b9-4244-9356-c0ebbe385210",
+      "position": [
+        0,
+        0,
+        0.01
+      ],
+      "rotation": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "videoControls": {
+        "loop": true,
+        "paused": false
+      }
+    },
     "6ae0a7af-7c3e-4b1e-af2c-abde166791e1": {
       "components": {},
       "geometry": null,
@@ -305,6 +373,34 @@
         10,
         5,
         5
+      ],
+      "rotation": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ]
+    },
+    "7fb4eb08-e3b9-4244-9356-c0ebbe385210": {
+      "components": {},
+      "geometry": null,
+      "id": "7fb4eb08-e3b9-4244-9356-c0ebbe385210",
+      "imageTarget": {
+        "name": "Recurso_6"
+      },
+      "material": null,
+      "name": "Marcador · Recurso_6",
+      "order": 9.5,
+      "parentId": "c5aee834-15af-47f7-8a2a-046705c2d6c6",
+      "position": [
+        0,
+        0,
+        0
       ],
       "rotation": [
         0,
