@@ -191,6 +191,102 @@
         1,
         1
       ]
+    },
+    "ad04b467-a2f4-4feb-b3a5-d9f1973d10f0": {
+      "components": {},
+      "geometry": null,
+      "id": "ad04b467-a2f4-4feb-b3a5-d9f1973d10f0",
+      "imageTarget": {
+        "name": "Recurso_2"
+      },
+      "material": null,
+      "name": "Marcador · Recurso_2",
+      "order": 5.5,
+      "parentId": "c5aee834-15af-47f7-8a2a-046705c2d6c6",
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ]
+    },
+    "b4541ac3-7238-4d3e-8e60-b8177e9de6b5": {
+      "components": {
+        "__inre_aparicion__": {
+          "id": "__inre_aparicion__",
+          "name": "inre-aparicion",
+          "parameters": {
+            "cubo": 0.75,
+            "demora": 0,
+            "esGltf": false,
+            "esTextura": true,
+            "esVideo": true
+          }
+        },
+        "b44aa3df-9291-4a3d-82ab-576ed5d5c49b": {
+          "id": "b44aa3df-9291-4a3d-82ab-576ed5d5c49b",
+          "name": "inre-video",
+          "parameters": {
+            "alphaTest": 0.5,
+            "blending": "normal",
+            "depthTest": true,
+            "depthWrite": false,
+            "forceTransparent": true,
+            "side": "double"
+          }
+        }
+      },
+      "geometry": {
+        "type": "plane",
+        "width": 1,
+        "height": 0.7799999999999999
+      },
+      "id": "b4541ac3-7238-4d3e-8e60-b8177e9de6b5",
+      "material": {
+        "type": "video",
+        "color": "#ffffff",
+        "textureSrc": {
+          "type": "asset",
+          "asset": "assets/escena2.webm"
+        },
+        "forceTransparent": true,
+        "depthWrite": false,
+        "side": "double",
+        "alphaTest": 0.5
+      },
+      "name": "escena2",
+      "order": 0.9117029113535351,
+      "parentId": "ad04b467-a2f4-4feb-b3a5-d9f1973d10f0",
+      "position": [
+        0,
+        0,
+        0.003
+      ],
+      "rotation": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "videoControls": {
+        "loop": true,
+        "paused": false
+      }
     }
   },
   "spaces": {

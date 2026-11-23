@@ -6,7 +6,7 @@
  * lienzo. Si algo falla dentro, se retira sola para no dejar la pantalla tapada.
  */
 
-const MARCADORES = ["Recurso_1"]
+const MARCADORES = ["Recurso_1","Recurso_2"]
 
 /**
  * Cuenta las descargas en curso de archivos del proyecto (assets/ o blobs) para
