@@ -166,6 +166,74 @@
         "paused": false
       }
     },
+    "41339ecf-fd15-479d-b2f5-ddfa04b385ce": {
+      "components": {
+        "903c1dbb-e448-4729-b82d-9bd5f289e9aa": {
+          "id": "903c1dbb-e448-4729-b82d-9bd5f289e9aa",
+          "name": "inre-video",
+          "parameters": {
+            "alphaTest": 0.5,
+            "blending": "normal",
+            "depthTest": true,
+            "depthWrite": false,
+            "forceTransparent": true,
+            "side": "double"
+          }
+        },
+        "__inre_aparicion__": {
+          "id": "__inre_aparicion__",
+          "name": "inre-aparicion",
+          "parameters": {
+            "cubo": 0.75,
+            "demora": 0,
+            "esGltf": false,
+            "esTextura": true,
+            "esVideo": true
+          }
+        }
+      },
+      "geometry": {
+        "type": "plane",
+        "width": 1,
+        "height": 0.7799999999999999
+      },
+      "id": "41339ecf-fd15-479d-b2f5-ddfa04b385ce",
+      "material": {
+        "type": "video",
+        "color": "#ffffff",
+        "textureSrc": {
+          "type": "asset",
+          "asset": "assets/escena5.webm"
+        },
+        "forceTransparent": true,
+        "depthWrite": false,
+        "side": "double",
+        "alphaTest": 0.5
+      },
+      "name": "escena5",
+      "order": 0.8830859880306313,
+      "parentId": "94e7798b-2b6c-48ba-8989-f1c21d910224",
+      "position": [
+        0,
+        0,
+        0.003
+      ],
+      "rotation": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "videoControls": {
+        "loop": true,
+        "paused": false
+      }
+    },
     "4252cc47-670e-4a1c-b899-aaca42a9f6b0": {
       "components": {
         "99839070-4977-4d82-8313-63090b79437c": {
@@ -340,7 +408,7 @@
       "position": [
         0,
         0,
-        0.010000000000000004
+        0.03
       ],
       "rotation": [
         0,
@@ -452,16 +520,16 @@
         1
       ]
     },
-    "98daac67-9020-4927-a537-84fbb6ae9d6f": {
+    "94e7798b-2b6c-48ba-8989-f1c21d910224": {
       "components": {},
       "geometry": null,
-      "id": "98daac67-9020-4927-a537-84fbb6ae9d6f",
+      "id": "94e7798b-2b6c-48ba-8989-f1c21d910224",
       "imageTarget": {
         "name": "Recurso_5"
       },
       "material": null,
       "name": "Marcador · Recurso_5",
-      "order": 8.5,
+      "order": 10.5,
       "parentId": "c5aee834-15af-47f7-8a2a-046705c2d6c6",
       "position": [
         0,
@@ -586,74 +654,6 @@
       "position": [
         0,
         0,
-        0.003
-      ],
-      "rotation": [
-        0,
-        0,
-        0,
-        1
-      ],
-      "scale": [
-        1,
-        1,
-        1
-      ],
-      "videoControls": {
-        "loop": true,
-        "paused": false
-      }
-    },
-    "cd95326a-d1f8-4d41-91ca-b36350190523": {
-      "components": {
-        "5d637f98-85a0-45ea-beaa-ab04be2ae565": {
-          "id": "5d637f98-85a0-45ea-beaa-ab04be2ae565",
-          "name": "inre-video",
-          "parameters": {
-            "alphaTest": 0.5,
-            "blending": "normal",
-            "depthTest": true,
-            "depthWrite": false,
-            "forceTransparent": true,
-            "side": "double"
-          }
-        },
-        "__inre_aparicion__": {
-          "id": "__inre_aparicion__",
-          "name": "inre-aparicion",
-          "parameters": {
-            "cubo": 0.75,
-            "demora": 0,
-            "esGltf": false,
-            "esTextura": true,
-            "esVideo": true
-          }
-        }
-      },
-      "geometry": {
-        "type": "plane",
-        "width": 1,
-        "height": 0.7799999999999999
-      },
-      "id": "cd95326a-d1f8-4d41-91ca-b36350190523",
-      "material": {
-        "type": "video",
-        "color": "#ffffff",
-        "textureSrc": {
-          "type": "asset",
-          "asset": "assets/escena5.webm"
-        },
-        "forceTransparent": true,
-        "depthWrite": false,
-        "side": "double",
-        "alphaTest": 0.5
-      },
-      "name": "escena5",
-      "order": 0.1634845275702299,
-      "parentId": "98daac67-9020-4927-a537-84fbb6ae9d6f",
-      "position": [
-        0,
-        -0.013,
         0.003
       ],
       "rotation": [
