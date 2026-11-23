@@ -2,6 +2,9 @@ import * as ecs from '@8thwall/ecs'
 import marcador0 from '../image-targets/Recurso_1.json'
 import marcador1 from '../image-targets/Recurso_2.json'
 import marcador2 from '../image-targets/Recurso_3.json'
+import marcador3 from '../image-targets/Recurso_4.json'
+import marcador4 from '../image-targets/Recurso_5.json'
+import marcador5 from '../image-targets/Recurso_6.json'
 
 /**
  * Carga los marcadores de imagen en el motor, y se queda vigilando que sigan puestos.
@@ -49,7 +52,7 @@ interface XrEngine {
 
 const engine = (): XrEngine | undefined => (window as unknown as {XR8?: XrEngine}).XR8
 
-const marcadores: unknown[] = [marcador0, marcador1, marcador2]
+const marcadores: unknown[] = [marcador0, marcador1, marcador2, marcador3, marcador4, marcador5]
 
 /**
  * Cuántos marcadores se cargan en el primer paso.

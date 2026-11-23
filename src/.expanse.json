@@ -194,6 +194,34 @@
         1
       ]
     },
+    "634a6067-dfef-4d7b-97ca-4ba5d7a752be": {
+      "components": {},
+      "geometry": null,
+      "id": "634a6067-dfef-4d7b-97ca-4ba5d7a752be",
+      "imageTarget": {
+        "name": "Recurso_4"
+      },
+      "material": null,
+      "name": "Marcador · Recurso_4",
+      "order": 7.5,
+      "parentId": "c5aee834-15af-47f7-8a2a-046705c2d6c6",
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ]
+    },
     "6ae0a7af-7c3e-4b1e-af2c-abde166791e1": {
       "components": {},
       "geometry": null,
