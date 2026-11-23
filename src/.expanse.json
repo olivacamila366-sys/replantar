@@ -98,6 +98,74 @@
         "paused": false
       }
     },
+    "4252cc47-670e-4a1c-b899-aaca42a9f6b0": {
+      "components": {
+        "99839070-4977-4d82-8313-63090b79437c": {
+          "id": "99839070-4977-4d82-8313-63090b79437c",
+          "name": "inre-video",
+          "parameters": {
+            "alphaTest": 0.5,
+            "blending": "normal",
+            "depthTest": true,
+            "depthWrite": false,
+            "forceTransparent": true,
+            "side": "double"
+          }
+        },
+        "__inre_aparicion__": {
+          "id": "__inre_aparicion__",
+          "name": "inre-aparicion",
+          "parameters": {
+            "cubo": 0.75,
+            "demora": 0,
+            "esGltf": false,
+            "esTextura": true,
+            "esVideo": true
+          }
+        }
+      },
+      "geometry": {
+        "type": "plane",
+        "width": 1,
+        "height": 0.7799999999999999
+      },
+      "id": "4252cc47-670e-4a1c-b899-aaca42a9f6b0",
+      "material": {
+        "type": "video",
+        "color": "#ffffff",
+        "textureSrc": {
+          "type": "asset",
+          "asset": "assets/escena3.webm"
+        },
+        "forceTransparent": true,
+        "depthWrite": false,
+        "side": "double",
+        "alphaTest": 0.5
+      },
+      "name": "escena3",
+      "order": 0.2735856117415768,
+      "parentId": "9f38b6a4-0235-4e29-ba70-af3cabb5a01c",
+      "position": [
+        0,
+        0,
+        0.003
+      ],
+      "rotation": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "videoControls": {
+        "loop": true,
+        "paused": false
+      }
+    },
     "5336ea50-663a-4efc-9025-7a686fb85cfe": {
       "components": {},
       "geometry": null,
@@ -174,6 +242,34 @@
       "material": null,
       "name": "Cámara",
       "order": 0.5,
+      "parentId": "c5aee834-15af-47f7-8a2a-046705c2d6c6",
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ]
+    },
+    "9f38b6a4-0235-4e29-ba70-af3cabb5a01c": {
+      "components": {},
+      "geometry": null,
+      "id": "9f38b6a4-0235-4e29-ba70-af3cabb5a01c",
+      "imageTarget": {
+        "name": "Recurso_3"
+      },
+      "material": null,
+      "name": "Marcador · Recurso_3",
+      "order": 6.5,
       "parentId": "c5aee834-15af-47f7-8a2a-046705c2d6c6",
       "position": [
         0,
